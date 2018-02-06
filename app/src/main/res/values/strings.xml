@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">UXMLAB</string>
+    <string name="String">로그인 성공이요</string>
+    <string name="input_id">Enter your student number</string>
+    <string name="input_password">Enter password</string>
+    <string name="input_name">Enter your name</string>
+    <string name="input_email">Enter your email</string>
+</resources>
