@@ -1,13 +1,11 @@
 package com.example.hh960.uxmlab;
 
-import android.app.Application;
 import android.app.ProgressDialog;
 
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,25 +27,17 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    ViewFlipper Vf;
-    Button BtnSignIn, BtnSignUp;
-    EditText inputID, inputPW;
-    HttpPost httppost;
-    StringBuffer buffer;
-    HttpResponse response;
-    HttpClient httpclient;
-    ArrayList<NameValuePair> nameValuePairs;
-    ProgressDialog dialog = null;
-    TextView tv;
+    private Button BtnSignIn;
+    private EditText inputID, inputPW;
+    private HttpPost httppost;
+    private HttpClient httpclient;
+    private ArrayList<NameValuePair> nameValuePairs;
+    private ProgressDialog dialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        BtnSignUp = (Button)findViewById(R.id.btn_signup);
         BtnSignIn = (Button)findViewById(R.id.btn_signin);
         inputID = (EditText)findViewById(R.id.user_id);
         inputPW = (EditText)findViewById(R.id.user_pw);
@@ -99,16 +88,17 @@ public class MainActivity extends AppCompatActivity {
                 });
                 dialog.dismiss();
             } else {
+                GlobalIdApplication idApp = (GlobalIdApplication) getApplication();
+                idApp.setId(inputID.getText().toString());
+                idApp.setIsStudent(GetIsStudent(response));
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Toast.makeText(MainActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
                     }
                 });
-                GlobalIdApplication idApp = (GlobalIdApplication) getApplication();
-                idApp.setId(inputID.getText().toString());
-                idApp.setIsStudent(GetIsStudent(response));
-                startActivity((new Intent(MainActivity.this, MenuPage.class)));
+                dialog.dismiss();
+                startActivity((new Intent(MainActivity.this, CourseListActivity.class)));
                 finish();
             }
         }
@@ -121,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void CliSignUp(View view)
     {
-        Intent intent = new Intent(this, SignupPage.class);
+        Intent intent = new Intent(this, SignupActivity.class);
         startActivity(intent);
     }
 

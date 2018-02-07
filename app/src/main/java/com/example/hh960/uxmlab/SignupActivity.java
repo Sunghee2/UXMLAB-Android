@@ -3,7 +3,6 @@ package com.example.hh960.uxmlab;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -17,7 +16,7 @@ import java.net.URLEncoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SignupPage  extends Activity {
+public class SignupActivity extends Activity {
     private EditText editTextId;
     private EditText editTextPw;
     private EditText editTextPw2; // 비밀번호 확인용
@@ -34,7 +33,6 @@ public class SignupPage  extends Activity {
         editTextPw2 = (EditText) findViewById(R.id.new_pw_check);
         editTextName = (EditText) findViewById(R.id.new_name);
         editTextEmail = (EditText) findViewById(R.id.new_email);
-
     }
 
     public static boolean checkEmail(String email){
@@ -70,7 +68,7 @@ public class SignupPage  extends Activity {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                loading = ProgressDialog.show(SignupPage.this, "Please Wait", null, true, true);
+                loading = ProgressDialog.show(SignupActivity.this, "Please Wait", null, true, true);
             }
             @Override
             protected void onPostExecute(String s) {
