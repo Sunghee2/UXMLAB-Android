@@ -76,14 +76,13 @@ public class SignupPage  extends Activity {
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
                 loading.dismiss();
-                Log.e("fdasafdfasd", s);
                 if(s.equals("failure")){
                     Toast.makeText(getApplicationContext(), "이미 존재하는 아이디입니다.", Toast.LENGTH_LONG).show();
                 } else if(s.equals("success")) {
                     Toast.makeText(getApplicationContext(), "회원가입 성공!", Toast.LENGTH_LONG).show();
                     finish();
                 }
-}
+            }
     @Override
     protected String doInBackground(String... params) {
 

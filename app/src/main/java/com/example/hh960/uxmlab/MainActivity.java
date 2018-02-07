@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
         BtnSignIn = (Button)findViewById(R.id.btn_signin);
         inputID = (EditText)findViewById(R.id.user_id);
         inputPW = (EditText)findViewById(R.id.user_pw);
-        tv = (TextView)findViewById(R.id.textView2);
 
 
         BtnSignIn.setOnClickListener(new OnClickListener() {

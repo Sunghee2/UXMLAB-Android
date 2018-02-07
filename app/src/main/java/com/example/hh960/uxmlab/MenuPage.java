@@ -6,8 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.view.View;
@@ -79,6 +81,7 @@ public class MenuPage extends AppCompatActivity {
                 }
                 menuAdapter = new MenuAdapter(getApplicationContext(), menu_itemList);
                 myCourseListView.setAdapter(menuAdapter);
+                setListViewHeightBaseOnChiledren(myCourseListView);
 
                 List<menu_item> menu_itemList_my_course = new ArrayList<>();
                 JSONArray jsonArray2 = new JSONObject(response).getJSONArray("all_course");
@@ -91,6 +94,7 @@ public class MenuPage extends AppCompatActivity {
                 }
                 menuAdapter = new MenuAdapter(getApplicationContext(), menu_itemList_my_course);
                 allCourseListView.setAdapter(menuAdapter);
+                setListViewHeightBaseOnChiledren(allCourseListView);
             } else if(check_my_course==0){
 
             }
@@ -106,6 +110,26 @@ public class MenuPage extends AppCompatActivity {
     {
         Intent intent = new Intent(this, AddCourseActivity.class);
         startActivity(intent);
+    }
+
+    public void setListViewHeightBaseOnChiledren(ListView listView){
+        ListAdapter listAdapter = listView.getAdapter();
+        if(listAdapter==null){
+            return;
+        }
+
+        int totalHeight = 0;
+
+        for(int i = 0; i < listAdapter.getCount(); i++){
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount()-1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
     }
 
 

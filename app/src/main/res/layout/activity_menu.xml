@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     tools:context="com.example.hh960.uxmlab.MenuPage"
     android:orientation="vertical">
-
     <Button
         android:id="@+id/add_course_btn"
         android:layout_width="wrap_content"
@@ -14,36 +13,49 @@
         android:visibility="gone"
         android:onClick="CliAddCourse"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="내 강의"
-        android:textSize="30dp"/>
-    <ListView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/listview_my_course"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:dividerHeight="10dp"
-        android:divider="#848181">
-    </ListView>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="전체 강의"
-        android:textSize="30dp"/>
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/listview_all_course"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:dividerHeight="10dp"
-        android:divider="#848181">
-    </ListView>
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="내 강의"
+                android:textSize="30dp"/>
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/listview_my_course"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:dividerHeight="10dp"
+                android:divider="#848181">
+            </ListView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="전체 강의"
+                android:textSize="30dp"
+                android:layout_marginTop="20dp"/>
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/listview_all_course"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:dividerHeight="10dp"
+                android:divider="#848181">
+            </ListView>
+
+        </LinearLayout>
+
+    </ScrollView>
+
 
 
 </LinearLayout>
