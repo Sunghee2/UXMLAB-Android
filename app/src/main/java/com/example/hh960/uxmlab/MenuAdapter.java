@@ -19,6 +19,11 @@ public class MenuAdapter extends BaseAdapter{
     private List<menu_item> list_munuArrayList;
 
     TextView courseNoTextView;
+
+    public void setList_munuArrayList(List<menu_item> list_munuArrayList) {
+        this.list_munuArrayList = list_munuArrayList;
+    }
+
     TextView courseNameTextView;
     TextView professorTextView;
 

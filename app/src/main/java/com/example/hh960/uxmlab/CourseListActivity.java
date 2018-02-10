@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
@@ -42,6 +43,7 @@ public class CourseListActivity extends AppCompatActivity {
     private ListView myCourseListView;
     private ListView allCourseListView;
     private MenuAdapter menuAdapter;
+    private MenuAdapter menuAdapter2;
     private List<menu_item> menu_itemList;
     private List<menu_item> menu_itemList_my_course;
     private Button add_course_btn;
@@ -74,29 +76,52 @@ public class CourseListActivity extends AppCompatActivity {
                 JSONArray jsonArray = new JSONObject(response).getJSONArray("course");
                 for(int i = 0; i < jsonArray.length(); i++){
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    int course_no = jsonObject.optInt("course_no");
+                    String course_no = jsonObject.optString("course_no");
                     String course_name = jsonObject.optString("course_name");
                     String professor = jsonObject.optString("professor");
                     menu_itemList.add(new menu_item(course_no, course_name, professor));
                 }
                 menuAdapter = new MenuAdapter(getApplicationContext(), menu_itemList);
                 myCourseListView.setAdapter(menuAdapter);
-                setListViewHeightBaseOnChiledren(myCourseListView);
+                setListViewHeightBaseOnChildren(myCourseListView);
 
                 menu_itemList_my_course = new ArrayList<>();
                 JSONArray jsonArray2 = new JSONObject(response).getJSONArray("all_course");
                 for(int i = 0; i < jsonArray2.length(); i++){
                     JSONObject jsonObject = jsonArray2.getJSONObject(i);
-                    int course_no = jsonObject.optInt("course_no");
+                    String course_no = jsonObject.optString("course_no");
                     String course_name = jsonObject.optString("course_name");
                     String professor = jsonObject.optString("professor");
                     menu_itemList_my_course.add(new menu_item(course_no, course_name, professor));
                 }
-                menuAdapter = new MenuAdapter(getApplicationContext(), menu_itemList_my_course);
-                allCourseListView.setAdapter(menuAdapter);
-                setListViewHeightBaseOnChiledren(allCourseListView);
+                menuAdapter2 = new MenuAdapter(getApplicationContext(), menu_itemList_my_course);
+                allCourseListView.setAdapter(menuAdapter2);
+                setListViewHeightBaseOnChildren(allCourseListView);
             } else if(check_my_course==0){
+                final List<menu_item> menu_itemList2 = new ArrayList<>();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        menu_itemList2.add(new menu_item("", "등록된 강의가 없습니다.", ""));
+                        MenuAdapter menuAdapter2 = new MenuAdapter(getApplicationContext(), menu_itemList2);
+                        myCourseListView.setAdapter(menuAdapter2);
+                        setListViewHeightBaseOnChildren(myCourseListView);
+                    }
+                });
 
+
+                menu_itemList_my_course = new ArrayList<>();
+                JSONArray jsonArray2 = new JSONObject(response).getJSONArray("all_course");
+                for(int i = 0; i < jsonArray2.length(); i++){
+                    JSONObject jsonObject = jsonArray2.getJSONObject(i);
+                    String course_no = jsonObject.optString("course_no");
+                    String course_name = jsonObject.optString("course_name");
+                    String professor = jsonObject.optString("professor");
+                    menu_itemList_my_course.add(new menu_item(course_no, course_name, professor));
+                }
+                menuAdapter2 = new MenuAdapter(getApplicationContext(), menu_itemList_my_course);
+                allCourseListView.setAdapter(menuAdapter2);
+                setListViewHeightBaseOnChildren(allCourseListView);
             }
 
             myCourseListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -126,7 +151,7 @@ public class CourseListActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void setListViewHeightBaseOnChiledren(ListView listView){
+    public void setListViewHeightBaseOnChildren(ListView listView){
         ListAdapter listAdapter = listView.getAdapter();
         if(listAdapter==null){
             return;
@@ -218,6 +243,64 @@ public class CourseListActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "key가 올바르지 않습니다.", Toast.LENGTH_SHORT).show();
                 } else if(s.equals("success")){ // insert 성공한 경우
                     Toast.makeText(getApplicationContext(), "성공적으로 등록되었습니다.", Toast.LENGTH_SHORT).show();
+                    List<menu_item> menu_itemList = new ArrayList<>();;
+                    List<menu_item> menu_itemList1 = new ArrayList<>();;
+                    try {
+                        GlobalIdApplication idApp = (GlobalIdApplication) getApplication();
+                        httpClient = new DefaultHttpClient();
+                        httpPost = new HttpPost("http://10.0.2.2:8080/uxmlab_course_list.php");
+                        nameValuePairArrayList = new ArrayList<NameValuePair>(1);
+                        nameValuePairArrayList.add(new BasicNameValuePair("id", idApp.getId()));
+                        httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairArrayList));
+                        ResponseHandler<String> responseHandler = new BasicResponseHandler();
+                        final String response = httpClient.execute(httpPost, responseHandler);
+                        Log.e("sdafasfasdfsadf", response);
+                        int check_my_course = new JSONObject(response).optInt("my_course");
+                        if (check_my_course == 1) {
+                            JSONArray jsonArray = new JSONObject(response).getJSONArray("course");
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String course_no = jsonObject.optString("course_no");
+                                String course_name = jsonObject.optString("course_name");
+                                String professor = jsonObject.optString("professor");
+                                menu_itemList.add(new menu_item(course_no, course_name, professor));
+                            }
+
+                            JSONArray jsonArray2 = new JSONObject(response).getJSONArray("all_course");
+                            for (int i = 0; i < jsonArray2.length(); i++) {
+                                JSONObject jsonObject2 = jsonArray2.getJSONObject(i);
+                                String course_no = jsonObject2.optString("course_no");
+                                String course_name = jsonObject2.optString("course_name");
+                                String professor = jsonObject2.optString("professor");
+                                menu_itemList1.add(new menu_item(course_no, course_name, professor));
+                            }
+                        }
+                    } catch(Exception e){
+
+                    }
+                    menuAdapter.setList_munuArrayList(menu_itemList);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            menuAdapter.notifyDataSetChanged();
+                            myCourseListView.setAdapter(menuAdapter);
+                            setListViewHeightBaseOnChildren(myCourseListView);
+                        }
+                    });
+
+                    menuAdapter2.setList_munuArrayList(menu_itemList1);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            menuAdapter2.notifyDataSetChanged();
+                            allCourseListView.setAdapter(menuAdapter2);
+                            setListViewHeightBaseOnChildren(allCourseListView);
+                        }
+                    });
+
+
+
+
                 } else if(s.equals("failure")){ // 키는 맞았지만 insert가 되지 않은 경우
                     Toast.makeText(getApplicationContext(), "강의가 등록되지 않았습니다.", Toast.LENGTH_SHORT).show();
                 }
