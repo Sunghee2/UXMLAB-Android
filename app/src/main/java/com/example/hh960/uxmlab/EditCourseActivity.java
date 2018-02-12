@@ -58,8 +58,6 @@ public class EditCourseActivity  extends AppCompatActivity{
             btn_edit = (Button) findViewById(R.id.button);
             date_text = (TextView) findViewById(R.id.text_date);
 
-//            edit_course_key.setText("safsdfsdfasf");
-
             readCourse(origin_course_no);
 
             date_text.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +89,6 @@ public class EditCourseActivity  extends AppCompatActivity{
             protected void onPostExecute(String s){
                 super.onPostExecute(s);
                 loading.dismiss();
-                Log.e("asdfsdf", s);
                 try {
                     JSONArray jsonArray = new JSONObject(s).getJSONArray("result");
                     JSONObject jsonObject = jsonArray.getJSONObject(0);
@@ -103,10 +100,10 @@ public class EditCourseActivity  extends AppCompatActivity{
                     if(!description.equals("null")) {
                         edit_description.setText(jsonObject.optString("description"));
                     }
-                    String date[] = jsonObject.optString("start_date").split("-");
-                    String year = date[1];
-                    String month = date[2];
-                    String day = date[3];
+                    String date[] = jsonObject.optString("start_date").split("[-]");
+                    String year = date[0];
+                    String month = date[1];
+                    String day = date[2];
                     date_text.setText(year+"-"+month+"-"+day);
                 } catch(Exception e) {
                 }

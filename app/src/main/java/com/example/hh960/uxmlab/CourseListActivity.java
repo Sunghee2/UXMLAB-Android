@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -36,7 +37,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CourseListActivity extends AppCompatActivity {
+public class CourseListActivity extends AppCompatActivity{
     DefaultHttpClient httpClient;
     HttpPost httpPost;
     ArrayList<NameValuePair> nameValuePairArrayList;
@@ -310,4 +311,5 @@ public class CourseListActivity extends AppCompatActivity {
         findData task = new findData();
         task.execute(course_key, course_no);
     }
+
 }

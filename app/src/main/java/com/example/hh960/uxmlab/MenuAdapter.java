@@ -19,6 +19,7 @@ import javax.microedition.khronos.opengles.GL;
  */
 
 public class MenuAdapter extends BaseAdapter{
+
     private Context context;
     private List<menu_item> list_munuArrayList;
     private boolean isStudent;
@@ -28,6 +29,7 @@ public class MenuAdapter extends BaseAdapter{
     public void setList_munuArrayList(List<menu_item> list_munuArrayList) {
         this.list_munuArrayList = list_munuArrayList;
     }
+
 
     TextView courseNameTextView;
     TextView professorTextView;
@@ -74,16 +76,20 @@ public class MenuAdapter extends BaseAdapter{
             delete_course_btn.setVisibility(View.VISIBLE);
         }
 
-        edit_course_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, EditCourseActivity.class);
-                intent.putExtra("course_no", String.valueOf(list_munuArrayList.get(0).getCourse_no()));
-                context.startActivity(intent);
-            }
-        });
+        edit_course_btn.setTag(position);
+        edit_course_btn.setOnClickListener(onClickListener);
 
         return view;
     }
 
+
+    Button.OnClickListener onClickListener = new Button.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            int position = Integer.parseInt(view.getTag().toString());
+            Intent intent = new Intent(context, EditCourseActivity.class);
+            intent.putExtra("course_no", list_munuArrayList.get(position).getCourse_no());
+            context.startActivity(intent);
+        }
+    };
 }
