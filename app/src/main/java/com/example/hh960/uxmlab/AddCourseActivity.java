@@ -3,6 +3,7 @@ package com.example.hh960.uxmlab;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -119,6 +120,9 @@ public class AddCourseActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "실패", Toast.LENGTH_SHORT).show();
                     } else if(s.equals("success")){
                         Toast.makeText(getApplicationContext(), "강의를 추가했습니다.", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(AddCourseActivity.this, CourseListActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
                         finish();
                     }
                 }

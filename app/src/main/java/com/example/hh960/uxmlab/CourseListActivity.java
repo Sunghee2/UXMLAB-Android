@@ -82,7 +82,7 @@ public class CourseListActivity extends AppCompatActivity{
                     String professor = jsonObject.optString("professor");
                     menu_itemList.add(new menu_item(course_no, course_name, professor));
                 }
-                menuAdapter = new MenuAdapter(getApplicationContext(), menu_itemList, idApp.getIsStudent());
+                menuAdapter = new MenuAdapter(CourseListActivity.this, menu_itemList, idApp.getIsStudent());
                 myCourseListView.setAdapter(menuAdapter);
                 setListViewHeightBaseOnChildren(myCourseListView);
 
@@ -95,7 +95,7 @@ public class CourseListActivity extends AppCompatActivity{
                     String professor = jsonObject.optString("professor");
                     menu_itemList_my_course.add(new menu_item(course_no, course_name, professor));
                 }
-                menuAdapter2 = new MenuAdapter(getApplicationContext(), menu_itemList_my_course, idApp.getIsStudent());
+                menuAdapter2 = new MenuAdapter(CourseListActivity.this, menu_itemList_my_course, idApp.getIsStudent());
                 allCourseListView.setAdapter(menuAdapter2);
                 setListViewHeightBaseOnChildren(allCourseListView);
             } else if(check_my_course==0){
@@ -104,7 +104,7 @@ public class CourseListActivity extends AppCompatActivity{
                     @Override
                     public void run() {
                         menu_itemList2.add(new menu_item("", "등록된 강의가 없습니다.", ""));
-                        MenuAdapter menuAdapter2 = new MenuAdapter(getApplicationContext(), menu_itemList2, idApp.getIsStudent());
+                        MenuAdapter menuAdapter2 = new MenuAdapter(CourseListActivity.this, menu_itemList2, idApp.getIsStudent());
                         myCourseListView.setAdapter(menuAdapter2);
                         setListViewHeightBaseOnChildren(myCourseListView);
                     }
@@ -120,7 +120,7 @@ public class CourseListActivity extends AppCompatActivity{
                     String professor = jsonObject.optString("professor");
                     menu_itemList_my_course.add(new menu_item(course_no, course_name, professor));
                 }
-                menuAdapter2 = new MenuAdapter(getApplicationContext(), menu_itemList_my_course, idApp.getIsStudent());
+                menuAdapter2 = new MenuAdapter(CourseListActivity.this, menu_itemList_my_course, idApp.getIsStudent());
                 allCourseListView.setAdapter(menuAdapter2);
                 setListViewHeightBaseOnChildren(allCourseListView);
             }
