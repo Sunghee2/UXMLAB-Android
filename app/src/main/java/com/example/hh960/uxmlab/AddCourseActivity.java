@@ -99,7 +99,6 @@ public class AddCourseActivity extends AppCompatActivity {
             } else {
                 insertoToDatabase(key, no, name, professor, date, description);
             }
-
         }
 
         private void insertoToDatabase(String key, String no, String name, String professor, String date, String description){

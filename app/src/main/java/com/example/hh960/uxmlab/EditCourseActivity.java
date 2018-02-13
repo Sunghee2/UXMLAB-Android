@@ -60,6 +60,7 @@ public class EditCourseActivity  extends AppCompatActivity{
 
             readCourse(origin_course_no);
 
+            month = month+1;
             date_text.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -71,6 +72,13 @@ public class EditCourseActivity  extends AppCompatActivity{
                         }
                     }, year, month, day);
                     datePickerDialog.show();
+                }
+            });
+
+            btn_edit.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+                    edit(view, origin_course_no);
                 }
             });
         }
@@ -101,9 +109,9 @@ public class EditCourseActivity  extends AppCompatActivity{
                         edit_description.setText(jsonObject.optString("description"));
                     }
                     String date[] = jsonObject.optString("start_date").split("[-]");
-                    String year = date[0];
-                    String month = date[1];
-                    String day = date[2];
+                    year = Integer.parseInt(date[0]);
+                    month = Integer.parseInt(date[1]);
+                    day = Integer.parseInt(date[2]);
                     date_text.setText(year+"-"+month+"-"+day);
                 } catch(Exception e) {
                 }
@@ -144,6 +152,110 @@ public class EditCourseActivity  extends AppCompatActivity{
         }
         readData task = new readData();
         task.execute(origin_course_no);
+
+    }
+
+    public void edit(View view, String origin_course_no){
+        String key = edit_course_key.getText().toString();
+        String no = edit_course_no.getText().toString();
+        String name = edit_course_name.getText().toString();
+        String professor = edit_professor.getText().toString();
+        String date = date_text.getText().toString();
+        String description = edit_description.getText().toString();
+
+        if(key==null || key.equals("")){
+            Toast.makeText(getApplicationContext(), "key를 입력해주세요.", Toast.LENGTH_SHORT).show();
+        } else if (no==null || no.equals("")){
+            Toast.makeText(getApplicationContext(), "강의번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
+        } else if(name==null || name.equals("")){
+            Toast.makeText(getApplicationContext(), "강의이름을 입력해주세요.", Toast.LENGTH_SHORT).show();
+        } else if(professor==null || professor.equals("")){
+            Toast.makeText(getApplicationContext(), "교수이름을 입력해주세요.", Toast.LENGTH_SHORT).show();
+        } else {
+            updateCourse(origin_course_no, key, no, name, professor, date, description);
+        }
+    }
+
+    private void updateCourse(String origin_course_no, String key, String no, String name, String professor, String date, String description){
+        class updateData extends AsyncTask<String, Void, String>{
+            ProgressDialog loading;
+
+            @Override
+            protected void onPreExecute(){
+                super.onPreExecute();
+                loading = ProgressDialog.show(EditCourseActivity.this, "Please Wait", null, true, true);
+            }
+
+            @Override
+            protected void onPostExecute(String s){
+                super.onPostExecute(s);
+                loading.dismiss();
+                if(s.equals("failure")){
+                    Toast.makeText(getApplicationContext(), "실패", Toast.LENGTH_SHORT).show();
+                } else if(s.equals("success")){
+                    Toast.makeText(getApplicationContext(), "성공적으로 강의를 수정했습니다.", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(EditCourseActivity.this, CourseListActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+
+            @Override
+            protected String doInBackground(String... params){
+                try{
+                    String origin_course_no = (String) params[0];
+                    String key = (String) params[1];
+                    String no = (String) params[2];
+                    String name = (String) params[3];
+                    String professor = (String) params[4];
+                    String date = (String) params[5];
+                    String description = (String) params[6];
+
+                    Log.e("Adsfasdf", origin_course_no);
+                    Log.e("Adsfasdf", key);
+                    Log.e("Adsfasdf", no);
+                    Log.e("Adsfasdf", name);
+                    Log.e("Adsfasdf", professor);
+                    Log.e("Adsfasdf", date);
+                    Log.e("Adsfasdf", description);
+
+                    String link = "http://10.0.2.2:8080/uxmlab_course_update.php";
+                    String data = URLEncoder.encode("origin_course_no", "UTF-8")+"="+URLEncoder.encode(origin_course_no, "UTF-8");
+                    data += "&" + URLEncoder.encode("key", "UTF-8")+"="+URLEncoder.encode(key, "UTF-8");
+                    data += "&" + URLEncoder.encode("no", "UTF-8")+"="+URLEncoder.encode(no, "UTF-8");
+                    data += "&" +URLEncoder.encode("name", "UTF-8")+"="+URLEncoder.encode(name, "UTF-8");
+                    data += "&" +URLEncoder.encode("professor", "UTF-8")+"="+URLEncoder.encode(professor, "UTF-8");
+                    data += "&" +URLEncoder.encode("date", "UTF-8")+"="+URLEncoder.encode(date, "UTF-8");
+                    data += "&" +URLEncoder.encode("description", "UTF-8")+"="+URLEncoder.encode(description, "UTF-8");
+
+                    URL url = new URL(link);
+                    URLConnection conn = url.openConnection();
+
+                    conn.setDoOutput(true);
+                    OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+
+                    wr.write(data);
+                    wr.flush();
+
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+                    StringBuilder sb = new StringBuilder();
+                    String line = null;
+
+                    while((line=reader.readLine())!=null){
+                        sb.append(line);
+                        break;
+                    }
+                    return sb.toString();
+
+                } catch(Exception e){
+                    return new String("Exception: "+e.getMessage());
+                }
+            }
+        }
+        updateData task = new updateData();
+        task.execute(origin_course_no, key, no, name, professor, date, description);
 
     }
 }
