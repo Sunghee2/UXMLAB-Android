@@ -4,18 +4,20 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
@@ -41,22 +43,37 @@ public class CourseListActivity extends AppCompatActivity{
     DefaultHttpClient httpClient;
     HttpPost httpPost;
     ArrayList<NameValuePair> nameValuePairArrayList;
+    private NestedScrollView scrollView;
     private ListView myCourseListView;
     private ListView allCourseListView;
     private MenuAdapter menuAdapter;
     private MenuAdapter menuAdapter2;
     private List<menu_item> menu_itemList;
     private List<menu_item> menu_itemList_my_course;
-    private Button add_course_btn;
+//    private Button add_course_btn;
+    private FloatingActionButton add_course_btn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu);
+        setContentView(R.layout.activity_course_list);
         final GlobalIdApplication idApp = (GlobalIdApplication) getApplication();
-        add_course_btn = (Button) findViewById(R.id.add_course_btn);
+//        add_course_btn = (Button) findViewById(R.id.add_course_btn);
+        scrollView = (NestedScrollView) findViewById(R.id.scrollView);
+        add_course_btn = (FloatingActionButton) findViewById(R.id.add_course_btn);
         if(idApp.getIsStudent()==false){
             add_course_btn.setVisibility(View.VISIBLE);
+            scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    if(scrollY>oldScrollY) {
+                        add_course_btn.hide();
+                    } else {
+                        add_course_btn.show();
+                    }
+                }
+            });
         }
 
         myCourseListView = (ListView) findViewById(R.id.listview_my_course);
