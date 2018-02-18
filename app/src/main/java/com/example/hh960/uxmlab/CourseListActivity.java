@@ -9,6 +9,9 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
@@ -38,6 +41,8 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import android.support.v7.widget.Toolbar;
+
 
 public class CourseListActivity extends AppCompatActivity{
     DefaultHttpClient httpClient;
@@ -52,12 +57,18 @@ public class CourseListActivity extends AppCompatActivity{
     private List<menu_item> menu_itemList_my_course;
 //    private Button add_course_btn;
     private FloatingActionButton add_course_btn;
+    private Toolbar toolbar;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_list);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
+
         final GlobalIdApplication idApp = (GlobalIdApplication) getApplication();
 //        add_course_btn = (Button) findViewById(R.id.add_course_btn);
         scrollView = (NestedScrollView) findViewById(R.id.scrollView);
@@ -160,6 +171,25 @@ public class CourseListActivity extends AppCompatActivity{
 
         } catch (Exception e){
 
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.toolbar_edit_user:
+                Toast.makeText(getApplicationContext(), "변경", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                Toast.makeText(getApplicationContext(), "설정", Toast.LENGTH_SHORT).show();
+                return super.onOptionsItemSelected(item);
         }
     }
 
